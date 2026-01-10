@@ -1,0 +1,57 @@
+{% extends 'journal/base.html' %}
+
+{% block title %}Login - Equestrian Journal{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 3rem auto;">
+    <h2 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Select Your Horse and Name</h2>
+    
+    <form method="post" style="padding: 2rem;">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="horse">Select Your Horse:</label>
+            <select id="horse" name="horse" required onchange="updateRiders()">
+                <option value="">-- Choose a horse --</option>
+                {% for horse in horses %}
+                    <option value="{{ horse.id }}">{{ horse.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="rider">Select Your Name:</label>
+            <select id="rider" name="rider" required>
+                <option value="">-- Select horse first --</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn" style="width: 100%; padding: 0.8rem; font-size: 1.1rem;">Log In</button>
+    </form>
+</div>
+
+<script>
+    function updateRiders() {
+        const horseSelect = document.getElementById('horse');
+        const riderSelect = document.getElementById('rider');
+        const horseId = horseSelect.value;
+
+        if (!horseId) {
+            riderSelect.innerHTML = '<option value="">-- Select horse first --</option>';
+            return;
+        }
+
+        fetch(`/api/riders/${horseId}/`)
+            .then(response => response.json())
+            .then(data => {
+                riderSelect.innerHTML = '<option value="">-- Choose a rider --</option>';
+                data.forEach(rider => {
+                    const option = document.createElement('option');
+                    option.value = rider.id;
+                    option.textContent = rider.name;
+                    riderSelect.appendChild(option);
+                });
+            });
+    }
+</script>
+{% endblock %}

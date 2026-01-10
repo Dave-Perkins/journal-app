@@ -1,0 +1,55 @@
+{% extends 'journal/base.html' %}
+
+{% block title %}Michelle Dashboard - Equestrian Journal{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h2>Michelle's Dashboard</h2>
+    <a href="{% url 'michelle_logout' %}" class="btn btn-secondary">Logout</a>
+</div>
+
+<div style="background-color: #fff3cd; border: 1px solid #ffc107; padding: 1rem; border-radius: 4px; margin-bottom: 2rem;">
+    <strong style="color: #856404;">{{ pending_count }} entry</strong><span style="color: #856404;"> waiting for your review</span>
+</div>
+
+{% if pending_entries %}
+    <h3 style="margin-bottom: 1rem; color: #2c3e50;">⏳ Pending Review</h3>
+    {% for entry in pending_entries %}
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div style="flex: 1;">
+                    <h3>{{ entry.rider.name }} - {{ entry.rider.horse.name }}</h3>
+                    <p class="card-meta">{{ entry.created_at|date:"F j, Y \a\t g:i A" }}</p>
+                    
+                    {% if entry.text_content %}
+                        <p style="margin-top: 1rem;">{{ entry.text_content|truncatewords:30 }}</p>
+                    {% endif %}
+                </div>
+                <a href="{% url 'michelle_entry' entry.id %}" class="btn" style="white-space: nowrap; margin-left: 1rem;">Review</a>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% if reviewed_entries %}
+    <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: #2c3e50;">✓ Already Reviewed</h3>
+    {% for entry in reviewed_entries %}
+        <div class="card" style="opacity: 0.8;">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div style="flex: 1;">
+                    <h3>{{ entry.rider.name }} - {{ entry.rider.horse.name }}</h3>
+                    <p class="card-meta">{{ entry.created_at|date:"F j, Y \a\t g:i A" }}</p>
+                    <p style="color: #28a745; margin-top: 0.5rem;"><small>✓ You have commented on this entry</small></p>
+                </div>
+                <a href="{% url 'michelle_entry' entry.id %}" class="btn btn-secondary" style="white-space: nowrap; margin-left: 1rem;">View</a>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% if not pending_entries and not reviewed_entries %}
+    <div class="card" style="text-align: center; padding: 3rem;">
+        <p style="color: #7f8c8d; margin-bottom: 1rem;">No entries have been marked for your review yet.</p>
+    </div>
+{% endif %}
+{% endblock %}

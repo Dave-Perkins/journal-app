@@ -1,0 +1,37 @@
+{% extends 'journal/base.html' %}
+
+{% block title %}Create Entry - Equestrian Journal{% endblock %}
+
+{% block content %}
+<h2 style="margin-bottom: 2rem; color: #2c3e50;">Create Journal Entry</h2>
+
+<p style="margin-bottom: 1.5rem; color: #7f8c8d;">
+    <strong>{{ rider.name }}</strong> riding <strong>{{ rider.horse.name }}</strong>
+</p>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div class="form-group">
+        <label for="id_text_content">{{ form.text_content.label }}</label>
+        {{ form.text_content }}
+        {% if form.text_content.errors %}
+            <div class="alert alert-error">{{ form.text_content.errors }}</div>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        <label for="id_image">{{ form.image.label }}</label>
+        {{ form.image }}
+        <p style="font-size: 0.9rem; color: #7f8c8d; margin-top: 0.5rem;">Optional: You can upload a photo from your riding session</p>
+        {% if form.image.errors %}
+            <div class="alert alert-error">{{ form.image.errors }}</div>
+        {% endif %}
+    </div>
+
+    <div style="display: flex; gap: 1rem;">
+        <button type="submit" class="btn btn-success">Save Entry</button>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+{% endblock %}

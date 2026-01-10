@@ -1,0 +1,58 @@
+{% extends 'journal/base.html' %}
+
+{% block title %}Dashboard - Equestrian Journal{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h2>Welcome, {{ rider.name }}!</h2>
+    <h3 style="color: #7f8c8d;">Riding {{ rider.horse.name }}</h3>
+</div>
+
+<div style="margin-bottom: 2rem;">
+    <a href="{% url 'create_entry' %}" class="btn btn-success">+ New Journal Entry</a>
+</div>
+
+{% if entries %}
+    <h3 style="margin-bottom: 1rem; color: #2c3e50;">Your Journal Entries</h3>
+    {% for entry in entries %}
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div style="flex: 1;">
+                    <h3>Entry from {{ entry.created_at|date:"F j, Y" }}</h3>
+                    <p class="card-meta">{{ entry.created_at|date:"g:i A" }}</p>
+                    
+                    {% if entry.comments.all %}
+                        <div style="background-color: #e8f5e9; border-left: 4px solid #28a745; padding: 0.75rem; margin: 0.5rem 0; border-radius: 4px;">
+                            <p style="color: #2e7d32; margin: 0; font-weight: 500;">
+                                <span style="font-size: 1.2rem;">💬</span> Michelle has responded to your entry!
+                            </p>
+                        </div>
+                    {% endif %}
+                    
+                    {% if entry.text_content %}
+                        <p>{{ entry.text_content|truncatewords:50 }}</p>
+                    {% endif %}
+                    
+                    {% if entry.image %}
+                        <img src="{{ entry.image.url }}" alt="Entry image" style="max-width: 300px; max-height: 300px; border-radius: 4px;">
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="entry-actions">
+                <a href="{% url 'entry_detail' entry.id %}" class="btn">View</a>
+                {% if not entry.alerted_michelle %}
+                    <a href="{% url 'alert_michelle' entry.id %}" class="btn btn-success">Alert Michelle</a>
+                {% else %}
+                    <span style="color: #28a745; padding: 0.6rem 1.2rem;">✓ Michelle Notified</span>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="card" style="text-align: center; padding: 3rem;">
+        <p style="color: #7f8c8d; margin-bottom: 1.5rem;">You haven't created any journal entries yet.</p>
+        <a href="{% url 'create_entry' %}" class="btn btn-success">Create Your First Entry</a>
+    </div>
+{% endif %}
+{% endblock %}

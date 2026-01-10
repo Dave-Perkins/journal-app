@@ -1,0 +1,29 @@
+[Unit]
+Description=Equestrian Journal App - Gunicorn
+After=network.target
+
+[Service]
+Type=notify
+User=journalapp
+Group=journalapp
+WorkingDirectory=/var/www/journal-app
+Environment="PATH=/var/www/journal-app/venv/bin"
+Environment="DJANGO_SETTINGS_MODULE=journalapp.settings_production"
+EnvironmentFile=/var/www/journal-app/.env.production
+ExecStart=/var/www/journal-app/venv/bin/gunicorn \
+    --workers 3 \
+    --worker-class sync \
+    --worker-tmp-dir /dev/shm \
+    --bind unix:/run/gunicorn.sock \
+    --error-logfile /var/log/journal-app/gunicorn-error.log \
+    --access-logfile /var/log/journal-app/gunicorn-access.log \
+    --log-level info \
+    journalapp.wsgi
+
+Restart=on-failure
+RestartSec=10
+KillMode=mixed
+KillSignal=SIGQUIT
+
+[Install]
+WantedBy=multi-user.target

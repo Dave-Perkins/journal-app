@@ -1,0 +1,64 @@
+{% extends 'journal/base.html' %}
+
+{% block title %}Review Entry - Equestrian Journal{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <a href="{% url 'michelle_dashboard' %}" style="color: #2c3e50; text-decoration: none;">← Back to Dashboard</a>
+</div>
+
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1.5rem;">
+        <div>
+            <h2>{{ entry.rider.name }}'s Entry</h2>
+            <p class="card-meta">
+                Riding <strong>{{ entry.rider.horse.name }}</strong>
+                <br>
+                {{ entry.created_at|date:"F j, Y \a\t g:i A" }}
+            </p>
+        </div>
+    </div>
+
+    {% if entry.text_content %}
+        <div style="margin: 1.5rem 0; padding: 1rem; background-color: #f8f9fa; border-left: 4px solid #2c3e50; border-radius: 4px;">
+            <h3 style="margin-bottom: 1rem; color: #2c3e50;">Reflection</h3>
+            <p style="white-space: pre-wrap; line-height: 1.6;">{{ entry.text_content }}</p>
+        </div>
+    {% endif %}
+
+    {% if entry.image %}
+        <div style="margin: 1.5rem 0;">
+            <h3 style="margin-bottom: 1rem;">Photo</h3>
+            <img src="{{ entry.image.url }}" alt="Entry photo" class="entry-image" style="max-width: 600px;">
+        </div>
+    {% endif %}
+</div>
+
+{% if comments %}
+    <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: #2c3e50;">Your Comments</h3>
+    {% for comment in comments %}
+        <div class="card" style="background-color: #f8f9fa;">
+            <p class="card-meta">{{ comment.created_at|date:"F j, Y \a\t g:i A" }}</p>
+            <p style="white-space: pre-wrap; line-height: 1.6;">{{ comment.text }}</p>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<h3 style="margin-top: 2rem; margin-bottom: 1rem; color: #2c3e50;">Add Your Comment</h3>
+<form method="post" class="card">
+    {% csrf_token %}
+    
+    <div class="form-group">
+        <label for="id_text">Your Feedback:</label>
+        {{ form.text }}
+        {% if form.text.errors %}
+            <div class="alert alert-error">{{ form.text.errors }}</div>
+        {% endif %}
+    </div>
+
+    <div style="display: flex; gap: 1rem;">
+        <button type="submit" class="btn btn-success">Post Comment</button>
+        <a href="{% url 'michelle_dashboard' %}" class="btn btn-secondary">Back</a>
+    </div>
+</form>
+{% endblock %}
