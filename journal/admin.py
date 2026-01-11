@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Horse, Rider, JournalEntry, Comment
+from .models import Horse, Rider, JournalEntry, Comment, Event
 
 
 @admin.register(Horse)
@@ -28,3 +28,12 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ('entry', 'created_at')
     search_fields = ('entry__rider__name', 'text')
     readonly_fields = ('created_at',)
+
+
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = ('horse', 'title', 'event_type', 'date', 'created_by')
+    list_filter = ('event_type', 'date', 'horse')
+    search_fields = ('horse__name', 'title', 'description')
+    readonly_fields = ('created_at', 'updated_at')
+

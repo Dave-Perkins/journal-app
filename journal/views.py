@@ -3,8 +3,8 @@ from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
-from .models import Horse, Rider, JournalEntry, Comment
-from .forms import JournalEntryForm, CommentForm
+from .models import Horse, Rider, JournalEntry, Comment, Event
+from .forms import JournalEntryForm, CommentForm, EventForm
 
 
 def login_view(request):
@@ -324,3 +324,198 @@ def manage_riders_view(request):
         'riders': riders,
     }
     return render(request, 'journal/manage_riders.html', context)
+
+
+# Calendar Views
+
+def calendar_view(request):
+    """Display calendar for logged-in rider's horse."""
+    from datetime import datetime
+    from calendar import monthcalendar, month_name
+    
+    rider_id = request.session.get('rider_id')
+    if not rider_id:
+        return redirect('login')
+    
+    rider = get_object_or_404(Rider, id=rider_id)
+    
+    # Get month/year from request or use current
+    year = int(request.GET.get('year', datetime.now().year))
+    month = int(request.GET.get('month', datetime.now().month))
+    
+    # Get all events for this horse in this month
+    from .models import Event
+    events = Event.objects.filter(horse=rider.horse, date__year=year, date__month=month)
+    
+    # Create a dict of events by date for easy lookup
+    events_by_date = {}
+    for event in events:
+        date_key = event.date.day
+        if date_key not in events_by_date:
+            events_by_date[date_key] = []
+        events_by_date[date_key].append(event)
+    
+    # Build calendar
+    cal = monthcalendar(year, month)
+    
+    # Navigation
+    prev_month = month - 1 if month > 1 else 12
+    prev_year = year if month > 1 else year - 1
+    next_month = month + 1 if month < 12 else 1
+    next_year = year if month < 12 else year + 1
+    
+    context = {
+        'rider': rider,
+        'horse': rider.horse,
+        'year': year,
+        'month': month,
+        'month_name': month_name[month],
+        'calendar': cal,
+        'events_by_date': events_by_date,
+        'prev_month': prev_month,
+        'prev_year': prev_year,
+        'next_month': next_month,
+        'next_year': next_year,
+    }
+    return render(request, 'journal/calendar.html', context)
+
+
+def add_event_view(request):
+    """Add an event to the calendar."""
+    from .forms import EventForm
+    
+    rider_id = request.session.get('rider_id')
+    if not rider_id:
+        return redirect('login')
+    
+    rider = get_object_or_404(Rider, id=rider_id)
+    
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.horse = rider.horse
+            event.created_by = rider
+            event.save()
+            messages.success(request, 'Event added to calendar!')
+            return redirect('calendar')
+    else:
+        form = EventForm()
+    
+    context = {
+        'rider': rider,
+        'form': form,
+        'title': 'Add Event'
+    }
+    return render(request, 'journal/event_form.html', context)
+
+
+def edit_event_view(request, event_id):
+    """Edit an event."""
+    from .forms import EventForm
+    from .models import Event
+    
+    rider_id = request.session.get('rider_id')
+    if not rider_id:
+        return redirect('login')
+    
+    rider = get_object_or_404(Rider, id=rider_id)
+    event = get_object_or_404(Event, id=event_id, horse=rider.horse)
+    
+    # Check if rider created this event or is admin
+    if event.created_by != rider:
+        messages.error(request, "You can only edit events you created.")
+        return redirect('calendar')
+    
+    if request.method == 'POST':
+        form = EventForm(request.POST, instance=event)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Event updated!')
+            return redirect('calendar')
+    else:
+        form = EventForm(instance=event)
+    
+    context = {
+        'rider': rider,
+        'form': form,
+        'event': event,
+        'title': 'Edit Event'
+    }
+    return render(request, 'journal/event_form.html', context)
+
+
+def delete_event_view(request, event_id):
+    """Delete an event."""
+    from .models import Event
+    
+    rider_id = request.session.get('rider_id')
+    if not rider_id:
+        return redirect('login')
+    
+    rider = get_object_or_404(Rider, id=rider_id)
+    event = get_object_or_404(Event, id=event_id, horse=rider.horse)
+    
+    # Check if rider created this event
+    if event.created_by != rider:
+        messages.error(request, "You can only delete events you created.")
+        return redirect('calendar')
+    
+    if request.method == 'POST':
+        event.delete()
+        messages.success(request, 'Event deleted!')
+        return redirect('calendar')
+    
+    context = {
+        'rider': rider,
+        'event': event,
+    }
+    return render(request, 'journal/event_confirm_delete.html', context)
+
+
+def michelle_calendar_view(request):
+    """Michelle's view of all horses' events."""
+    from datetime import datetime
+    from calendar import monthcalendar, month_name
+    from .models import Event
+    
+    if not request.session.get('is_michelle'):
+        return redirect('michelle_login')
+    
+    # Get month/year from request or use current
+    year = int(request.GET.get('year', datetime.now().year))
+    month = int(request.GET.get('month', datetime.now().month))
+    
+    # Get all events for all horses in this month
+    all_events = Event.objects.filter(date__year=year, date__month=month).order_by('date', 'time')
+    
+    # Create a dict of events by date
+    events_by_date = {}
+    for event in all_events:
+        date_key = event.date.day
+        if date_key not in events_by_date:
+            events_by_date[date_key] = []
+        events_by_date[date_key].append(event)
+    
+    # Build calendar
+    cal = monthcalendar(year, month)
+    
+    # Navigation
+    prev_month = month - 1 if month > 1 else 12
+    prev_year = year if month > 1 else year - 1
+    next_month = month + 1 if month < 12 else 1
+    next_year = year if month < 12 else year + 1
+    
+    context = {
+        'year': year,
+        'month': month,
+        'month_name': month_name[month],
+        'calendar': cal,
+        'events_by_date': events_by_date,
+        'prev_month': prev_month,
+        'prev_year': prev_year,
+        'next_month': next_month,
+        'next_year': next_year,
+        'all_events': all_events,
+    }
+    return render(request, 'journal/michelle_calendar.html', context)

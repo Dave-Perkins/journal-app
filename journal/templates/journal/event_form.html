@@ -1,0 +1,66 @@
+{% extends 'journal/base.html' %}
+
+{% block title %}{{ title }} - Equestrian Journal{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1>{{ title }}</h1>
+            
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="{{ form.title.id_for_label }}" class="form-label">Event Title:</label>
+                            {{ form.title }}
+                            {% if form.title.errors %}
+                                <div class="text-danger">{{ form.title.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.event_type.id_for_label }}" class="form-label">Event Type:</label>
+                            {{ form.event_type }}
+                            {% if form.event_type.errors %}
+                                <div class="text-danger">{{ form.event_type.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.date.id_for_label }}" class="form-label">Date:</label>
+                                {{ form.date }}
+                                {% if form.date.errors %}
+                                    <div class="text-danger">{{ form.date.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.time.id_for_label }}" class="form-label">Time (optional):</label>
+                                {{ form.time }}
+                                {% if form.time.errors %}
+                                    <div class="text-danger">{{ form.time.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">Description (optional):</label>
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                                <div class="text-danger">{{ form.description.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">Save Event</button>
+                            <a href="{% url 'calendar' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
