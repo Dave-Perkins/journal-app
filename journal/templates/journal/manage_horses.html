@@ -1,0 +1,63 @@
+{% extends 'journal/base.html' %}
+
+{% block title %}Manage Horses - Equestrian Journal{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1>Manage Horses</h1>
+            
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0">Add New Horse</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            <input type="text" name="horse_name" class="form-control" placeholder="Horse name" required>
+                            <button class="btn btn-primary" type="submit" name="action" value="add">Add Horse</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Horses ({{ horses.count }})</h4>
+                </div>
+                <div class="card-body">
+                    {% if horses %}
+                        <div class="list-group">
+                            {% for horse in horses %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="mb-1">{{ horse.name }}</h5>
+                                        <small class="text-muted">{{ horse.riders.count }} rider(s)</small>
+                                    </div>
+                                    <form method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="horse_id" value="{{ horse.id }}">
+                                        <button class="btn btn-sm btn-danger" type="submit" name="action" value="delete" onclick="return confirm('Delete this horse?')">Delete</button>
+                                    </form>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No horses yet. Add one above!</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="{% url 'manage_riders' %}" class="btn btn-secondary">Manage Riders</a>
+                <form method="post" action="{% url 'logout_view' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-secondary">Logout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

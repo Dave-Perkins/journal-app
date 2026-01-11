@@ -1,0 +1,75 @@
+{% extends 'journal/base.html' %}
+
+{% block title %}Manage Riders - Equestrian Journal{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1>Manage Riders</h1>
+            
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0">Add New Rider</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="rider_name" class="form-label">Rider Name:</label>
+                                <input type="text" id="rider_name" name="rider_name" class="form-control" placeholder="Rider name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="horse_id" class="form-label">Horse:</label>
+                                <select id="horse_id" name="horse_id" class="form-control" required>
+                                    <option value="">Select a horse...</option>
+                                    {% for horse in horses %}
+                                        <option value="{{ horse.id }}">{{ horse.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" type="submit" name="action" value="add">Add Rider</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Riders ({{ riders.count }})</h4>
+                </div>
+                <div class="card-body">
+                    {% if riders %}
+                        <div class="list-group">
+                            {% for rider in riders %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="mb-1">{{ rider.name }}</h5>
+                                        <small class="text-muted">{{ rider.horse.name }} - {{ rider.journal_entries.count }} entry/entries</small>
+                                    </div>
+                                    <form method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="rider_id" value="{{ rider.id }}">
+                                        <button class="btn btn-sm btn-danger" type="submit" name="action" value="delete" onclick="return confirm('Delete this rider?')">Delete</button>
+                                    </form>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No riders yet. Add one above!</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="{% url 'manage_horses' %}" class="btn btn-secondary">Manage Horses</a>
+                <form method="post" action="{% url 'logout_view' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-secondary">Logout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -15,4 +15,9 @@ urlpatterns = [
     path('michelle/dashboard/', views.michelle_dashboard_view, name='michelle_dashboard'),
     path('michelle/entry/<int:entry_id>/', views.michelle_entry_view, name='michelle_entry'),
     path('michelle/logout/', views.michelle_logout_view, name='michelle_logout'),
+    
+    # Management routes
+    path('manage/login/', views.management_login_view, name='management_login'),
+    path('manage/horses/', views.manage_horses_view, name='manage_horses'),
+    path('manage/riders/', views.manage_riders_view, name='manage_riders'),
 ]

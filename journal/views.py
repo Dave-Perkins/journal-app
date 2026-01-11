@@ -226,3 +226,101 @@ def michelle_logout_view(request):
     request.session.flush()
     messages.success(request, 'Logged out successfully!')
     return redirect('michelle_login')
+
+
+# Management Views (for adding horses and riders)
+
+def management_login_view(request):
+    """Login for management (add horses/riders)."""
+    if request.method == 'POST':
+        password = request.POST.get('password', '')
+        if password == 'admin123':  # Simple password - change this!
+            request.session['is_admin'] = True
+            return redirect('manage_horses')
+        else:
+            messages.error(request, 'Invalid password.')
+    
+    return render(request, 'journal/management_login.html')
+
+
+def manage_horses_view(request):
+    """Manage horses - add/edit."""
+    if not request.session.get('is_admin'):
+        return redirect('management_login')
+    
+    horses = Horse.objects.all().order_by('name')
+    
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'add':
+            horse_name = request.POST.get('horse_name', '').strip()
+            if horse_name:
+                horse, created = Horse.objects.get_or_create(name=horse_name)
+                if created:
+                    messages.success(request, f'Horse "{horse_name}" added!')
+                else:
+                    messages.info(request, f'Horse "{horse_name}" already exists.')
+            else:
+                messages.error(request, 'Horse name is required.')
+        elif action == 'delete':
+            horse_id = request.POST.get('horse_id')
+            try:
+                horse = Horse.objects.get(id=horse_id)
+                horse_name = horse.name
+                horse.delete()
+                messages.success(request, f'Horse "{horse_name}" deleted!')
+            except Horse.DoesNotExist:
+                messages.error(request, 'Horse not found.')
+        
+        return redirect('manage_horses')
+    
+    context = {'horses': horses}
+    return render(request, 'journal/manage_horses.html', context)
+
+
+def manage_riders_view(request):
+    """Manage riders - add/edit."""
+    if not request.session.get('is_admin'):
+        return redirect('management_login')
+    
+    horses = Horse.objects.all().order_by('name')
+    riders = Rider.objects.all().order_by('name')
+    
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'add':
+            rider_name = request.POST.get('rider_name', '').strip()
+            horse_id = request.POST.get('horse_id')
+            
+            if not rider_name or not horse_id:
+                messages.error(request, 'Rider name and horse are required.')
+            else:
+                try:
+                    horse = Horse.objects.get(id=horse_id)
+                    rider, created = Rider.objects.get_or_create(
+                        name=rider_name,
+                        horse=horse
+                    )
+                    if created:
+                        messages.success(request, f'Rider "{rider_name}" added to {horse.name}!')
+                    else:
+                        messages.info(request, f'Rider "{rider_name}" already exists for {horse.name}.')
+                except Horse.DoesNotExist:
+                    messages.error(request, 'Horse not found.')
+        elif action == 'delete':
+            rider_id = request.POST.get('rider_id')
+            try:
+                rider = Rider.objects.get(id=rider_id)
+                rider_name = rider.name
+                rider.delete()
+                messages.success(request, f'Rider "{rider_name}" deleted!')
+            except Rider.DoesNotExist:
+                messages.error(request, 'Rider not found.')
+        
+        return redirect('manage_riders')
+    
+    context = {
+        'horses': horses,
+        'riders': riders,
+    }
+    return render(request, 'journal/manage_riders.html', context)
