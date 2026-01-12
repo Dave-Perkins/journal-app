@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 class Horse(models.Model):
     """Represents a horse that can be ridden by multiple riders."""
     name = models.CharField(max_length=100, unique=True)
+    photo = models.ImageField(upload_to='horse_photos/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

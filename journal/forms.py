@@ -1,5 +1,5 @@
 from django import forms
-from .models import JournalEntry, Comment, Event, Goal
+from .models import JournalEntry, Comment, Event, Goal, Horse
 
 
 class JournalEntryForm(forms.ModelForm):
@@ -73,5 +73,17 @@ class GoalForm(forms.ModelForm):
                 'class': 'form-control',
                 'rows': 4,
                 'placeholder': 'Describe your goal and how you plan to achieve it (optional)'
+            })
+        }
+
+
+class HorsePhotoForm(forms.ModelForm):
+    class Meta:
+        model = Horse
+        fields = ['photo']
+        widgets = {
+            'photo': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'
             })
         }

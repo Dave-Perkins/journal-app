@@ -5,7 +5,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.utils import timezone
 from .models import Horse, Rider, JournalEntry, Comment, Event, Goal
-from .forms import JournalEntryForm, CommentForm, EventForm, GoalForm
+from .forms import JournalEntryForm, CommentForm, EventForm, GoalForm, HorsePhotoForm
 
 
 def login_view(request):
@@ -660,3 +660,29 @@ def delete_goal_view(request, goal_id):
     goal.delete()
     messages.success(request, f"Goal '{goal_title}' deleted.")
     return redirect('goals')
+
+
+def horse_photo_view(request):
+    """Upload or update the horse photo."""
+    rider_id = request.session.get('rider_id')
+    if not rider_id:
+        return redirect('login')
+    
+    rider = get_object_or_404(Rider, id=rider_id)
+    horse = rider.horse
+    
+    if request.method == 'POST':
+        form = HorsePhotoForm(request.POST, request.FILES, instance=horse)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"{horse.name}'s photo updated successfully!")
+            return redirect('dashboard')
+    else:
+        form = HorsePhotoForm(instance=horse)
+    
+    context = {
+        'rider': rider,
+        'horse': horse,
+        'form': form,
+    }
+    return render(request, 'journal/horse_photo.html', context)

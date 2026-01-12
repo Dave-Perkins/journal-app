@@ -7,6 +7,7 @@ urlpatterns = [
     path('entry/new/', views.create_entry_view, name='create_entry'),
     path('entry/<int:entry_id>/', views.entry_detail_view, name='entry_detail'),
     path('entry/<int:entry_id>/alert/', views.alert_michelle_view, name='alert_michelle'),
+    path('horse/photo/', views.horse_photo_view, name='horse_photo'),
     path('logout/', views.logout_view, name='logout'),
     path('api/riders/<int:horse_id>/', views.get_riders_for_horse, name='get_riders'),
     
