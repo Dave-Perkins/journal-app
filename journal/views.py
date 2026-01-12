@@ -226,7 +226,7 @@ def michelle_logout_view(request):
     """Logout Michelle."""
     request.session.flush()
     messages.success(request, 'Logged out successfully!')
-    return redirect('michelle_login')
+    return redirect('login')
 
 
 # Management Views (for adding horses and riders)
