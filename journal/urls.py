@@ -29,6 +29,7 @@ urlpatterns = [
     path('michelle/dashboard/', views.michelle_dashboard_view, name='michelle_dashboard'),
     path('michelle/entry/<int:entry_id>/', views.michelle_entry_view, name='michelle_entry'),
     path('michelle/calendar/', views.michelle_calendar_view, name='michelle_calendar'),
+    path('michelle/goals/', views.michelle_goals_view, name='michelle_goals'),
     path('michelle/logout/', views.michelle_logout_view, name='michelle_logout'),
     
     # Management routes

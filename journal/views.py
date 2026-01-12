@@ -522,6 +522,31 @@ def michelle_calendar_view(request):
     return render(request, 'journal/michelle_calendar.html', context)
 
 
+def michelle_goals_view(request):
+    """Michelle's view of all riders' goals."""
+    if not request.session.get('is_michelle'):
+        return redirect('michelle_login')
+    
+    # Get all goals, grouped by rider
+    all_goals = Goal.objects.select_related('rider', 'rider__horse').order_by('rider', '-created_at')
+    
+    # Group goals by rider
+    riders_goals = {}
+    for goal in all_goals:
+        rider = goal.rider
+        if rider not in riders_goals:
+            riders_goals[rider] = {'active': [], 'completed': []}
+        if goal.status == 'active':
+            riders_goals[rider]['active'].append(goal)
+        else:
+            riders_goals[rider]['completed'].append(goal)
+    
+    context = {
+        'riders_goals': riders_goals,
+    }
+    return render(request, 'journal/michelle_goals.html', context)
+
+
 # Goal management views
 
 def goals_view(request):
