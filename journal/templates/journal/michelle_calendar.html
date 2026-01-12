@@ -25,7 +25,7 @@
         <div class="card-body">
             <!-- Calendar Table -->
             <div class="table-responsive">
-                <table class="table table-bordered text-center">
+                <table class="table table-bordered text-center" style="table-layout: fixed; width: 100%;">
                     <thead class="table-light">
                         <tr>
                             <th>Sun</th>
@@ -39,9 +39,9 @@
                     </thead>
                     <tbody>
                         {% for week in calendar %}
-                            <tr style="height: 140px;">
+                            <tr style="height: 120px;">
                                 {% for day in week %}
-                                    <td class="align-top {% if day == 0 %}table-light{% endif %}" style="background-color: {% if day == 0 %}#f8f9fa{% endif %};">
+                                    <td class="align-top {% if day == 0 %}table-light{% endif %}" style="background-color: {% if day == 0 %}#f8f9fa{% endif %}; word-wrap: break-word; overflow-wrap: break-word;">
                                         {% if day != 0 %}
                                             <strong>{{ day }}</strong>
                                             <div style="margin-top: 0.5rem; font-size: 0.75rem;">
