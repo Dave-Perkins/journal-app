@@ -90,6 +90,9 @@
                                 </div>
                             </div>
                         </div>
+                        {% if not forloop.last %}
+                            <hr style="margin: 0.5rem 0;">
+                        {% endif %}
                     {% endfor %}
                 </div>
             {% else %}
