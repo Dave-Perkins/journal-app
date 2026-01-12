@@ -35,12 +35,12 @@
                                     </small>
                                 </div>
                             </div>
-                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: flex-start;">
-                                <a href="{% url 'edit_goal' goal.id %}" class="btn btn-sm btn-outline-primary" style="white-space: nowrap;">Edit</a>
-                                <a href="{% url 'complete_goal' goal.id %}" class="btn btn-sm btn-outline-success" style="white-space: nowrap;">✓ Complete</a>
-                                <form method="POST" action="{% url 'delete_goal' goal.id %}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this goal?');">
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+                                <a href="{% url 'edit_goal' goal.id %}" class="btn btn-sm btn-outline-primary" style="white-space: nowrap; margin: 0;">Edit</a>
+                                <a href="{% url 'complete_goal' goal.id %}" class="btn btn-sm btn-outline-success" style="white-space: nowrap; margin: 0;">✓ Complete</a>
+                                <form method="POST" action="{% url 'delete_goal' goal.id %}" style="display: inline; margin: 0;" onsubmit="return confirm('Are you sure you want to delete this goal?');">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-sm btn-outline-danger" style="white-space: nowrap;">Delete</button>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" style="white-space: nowrap; margin: 0;">Delete</button>
                                 </form>
                             </div>
                         </div>
@@ -73,11 +73,11 @@
                                     </small>
                                 </div>
                             </div>
-                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: flex-start;">
-                                <a href="{% url 'reactivate_goal' goal.id %}" class="btn btn-sm btn-outline-warning" style="white-space: nowrap;">Reactivate</a>
-                                <form method="POST" action="{% url 'delete_goal' goal.id %}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this goal?');">
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+                                <a href="{% url 'reactivate_goal' goal.id %}" class="btn btn-sm btn-outline-warning" style="white-space: nowrap; margin: 0;">Reactivate</a>
+                                <form method="POST" action="{% url 'delete_goal' goal.id %}" style="display: inline; margin: 0;" onsubmit="return confirm('Are you sure you want to delete this goal?');">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-sm btn-outline-danger" style="white-space: nowrap;">Delete</button>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" style="white-space: nowrap; margin: 0;">Delete</button>
                                 </form>
                             </div>
                         </div>
