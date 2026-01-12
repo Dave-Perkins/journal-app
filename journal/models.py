@@ -82,3 +82,25 @@ class Event(models.Model):
 
     class Meta:
         ordering = ['date', 'time']
+
+
+class Goal(models.Model):
+    """Represents a goal set by a rider."""
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('completed', 'Completed'),
+    ]
+    
+    rider = models.ForeignKey(Rider, on_delete=models.CASCADE, related_name='goals')
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
+    created_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.rider.name} - {self.title}"
+
+    class Meta:
+        ordering = ['-created_at']

@@ -16,6 +16,14 @@ urlpatterns = [
     path('calendar/event/<int:event_id>/edit/', views.edit_event_view, name='edit_event'),
     path('calendar/event/<int:event_id>/delete/', views.delete_event_view, name='delete_event'),
     
+    # Goals routes
+    path('goals/', views.goals_view, name='goals'),
+    path('goals/add/', views.add_goal_view, name='add_goal'),
+    path('goals/<int:goal_id>/edit/', views.edit_goal_view, name='edit_goal'),
+    path('goals/<int:goal_id>/complete/', views.complete_goal_view, name='complete_goal'),
+    path('goals/<int:goal_id>/reactivate/', views.reactivate_goal_view, name='reactivate_goal'),
+    path('goals/<int:goal_id>/delete/', views.delete_goal_view, name='delete_goal'),
+    
     # Michelle's routes
     path('michelle/', views.michelle_login_view, name='michelle_login'),
     path('michelle/dashboard/', views.michelle_dashboard_view, name='michelle_dashboard'),

@@ -3,8 +3,9 @@ from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
-from .models import Horse, Rider, JournalEntry, Comment, Event
-from .forms import JournalEntryForm, CommentForm, EventForm
+from django.utils import timezone
+from .models import Horse, Rider, JournalEntry, Comment, Event, Goal
+from .forms import JournalEntryForm, CommentForm, EventForm, GoalForm
 
 
 def login_view(request):
@@ -519,3 +520,118 @@ def michelle_calendar_view(request):
         'all_events': all_events,
     }
     return render(request, 'journal/michelle_calendar.html', context)
+
+
+# Goal management views
+
+def goals_view(request):
+    """Display list of goals for the logged-in rider."""
+    rider_id = request.session.get('rider_id')
+    if not rider_id:
+        return redirect('login')
+    
+    rider = get_object_or_404(Rider, id=rider_id)
+    active_goals = rider.goals.filter(status='active').order_by('-created_at')
+    completed_goals = rider.goals.filter(status='completed').order_by('-completed_at')
+    
+    context = {
+        'rider': rider,
+        'active_goals': active_goals,
+        'completed_goals': completed_goals,
+    }
+    return render(request, 'journal/goals.html', context)
+
+
+def add_goal_view(request):
+    """Create a new goal."""
+    rider_id = request.session.get('rider_id')
+    if not rider_id:
+        return redirect('login')
+    
+    rider = get_object_or_404(Rider, id=rider_id)
+    
+    if request.method == 'POST':
+        form = GoalForm(request.POST)
+        if form.is_valid():
+            goal = form.save(commit=False)
+            goal.rider = rider
+            goal.save()
+            messages.success(request, f"Goal '{goal.title}' added successfully!")
+            return redirect('goals')
+    else:
+        form = GoalForm()
+    
+    context = {
+        'rider': rider,
+        'form': form,
+        'title': 'Add New Goal'
+    }
+    return render(request, 'journal/goal_form.html', context)
+
+
+def edit_goal_view(request, goal_id):
+    """Edit an existing goal."""
+    rider_id = request.session.get('rider_id')
+    if not rider_id:
+        return redirect('login')
+    
+    goal = get_object_or_404(Goal, id=goal_id, rider_id=rider_id)
+    
+    if request.method == 'POST':
+        form = GoalForm(request.POST, instance=goal)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"Goal '{goal.title}' updated successfully!")
+            return redirect('goals')
+    else:
+        form = GoalForm(instance=goal)
+    
+    context = {
+        'rider': goal.rider,
+        'form': form,
+        'goal': goal,
+        'title': f'Edit Goal: {goal.title}'
+    }
+    return render(request, 'journal/goal_form.html', context)
+
+
+def complete_goal_view(request, goal_id):
+    """Mark a goal as completed."""
+    rider_id = request.session.get('rider_id')
+    if not rider_id:
+        return redirect('login')
+    
+    goal = get_object_or_404(Goal, id=goal_id, rider_id=rider_id)
+    goal.status = 'completed'
+    goal.completed_at = timezone.now()
+    goal.save()
+    messages.success(request, f"🎉 Goal '{goal.title}' completed!")
+    return redirect('goals')
+
+
+def reactivate_goal_view(request, goal_id):
+    """Mark a completed goal as active again."""
+    rider_id = request.session.get('rider_id')
+    if not rider_id:
+        return redirect('login')
+    
+    goal = get_object_or_404(Goal, id=goal_id, rider_id=rider_id)
+    goal.status = 'active'
+    goal.completed_at = None
+    goal.save()
+    messages.success(request, f"Goal '{goal.title}' reactivated.")
+    return redirect('goals')
+
+
+@require_http_methods(["POST"])
+def delete_goal_view(request, goal_id):
+    """Delete a goal."""
+    rider_id = request.session.get('rider_id')
+    if not rider_id:
+        return redirect('login')
+    
+    goal = get_object_or_404(Goal, id=goal_id, rider_id=rider_id)
+    goal_title = goal.title
+    goal.delete()
+    messages.success(request, f"Goal '{goal_title}' deleted.")
+    return redirect('goals')

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Horse, Rider, JournalEntry, Comment, Event
+from .models import Horse, Rider, JournalEntry, Comment, Event, Goal
 
 
 @admin.register(Horse)
@@ -37,3 +37,10 @@ class EventAdmin(admin.ModelAdmin):
     search_fields = ('horse__name', 'title', 'description')
     readonly_fields = ('created_at', 'updated_at')
 
+
+@admin.register(Goal)
+class GoalAdmin(admin.ModelAdmin):
+    list_display = ('rider', 'title', 'status', 'created_at', 'completed_at')
+    list_filter = ('status', 'created_at')
+    search_fields = ('rider__name', 'title', 'description')
+    readonly_fields = ('created_at', 'updated_at')

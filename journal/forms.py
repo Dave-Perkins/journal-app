@@ -1,5 +1,5 @@
 from django import forms
-from .models import JournalEntry, Comment, Event
+from .models import JournalEntry, Comment, Event, Goal
 
 
 class JournalEntryForm(forms.ModelForm):
@@ -59,3 +59,19 @@ class EventForm(forms.ModelForm):
             })
         }
 
+
+class GoalForm(forms.ModelForm):
+    class Meta:
+        model = Goal
+        fields = ['title', 'description']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Goal title'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Describe your goal and how you plan to achieve it (optional)'
+            })
+        }

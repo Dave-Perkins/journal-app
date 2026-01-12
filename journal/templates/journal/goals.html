@@ -1,0 +1,86 @@
+{% extends 'journal/base.html' %}
+
+{% block title %}My Goals - Equestrian Journal{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1>🎯 My Goals</h1>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{% url 'add_goal' %}" class="btn btn-primary">+ Add Goal</a>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <!-- Active Goals -->
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Active Goals</h5>
+        </div>
+        <div class="card-body">
+            {% if active_goals %}
+                <div class="list-group">
+                    {% for goal in active_goals %}
+                        <div class="list-group-item d-flex justify-content-between align-items-start">
+                            <div style="flex-grow: 1;">
+                                <h6 class="mb-1">{{ goal.title }}</h6>
+                                {% if goal.description %}
+                                    <p class="mb-2" style="font-size: 0.95rem;">{{ goal.description }}</p>
+                                {% endif %}
+                                <small class="text-muted">
+                                    Created {{ goal.created_at|date:"M d, Y" }}
+                                </small>
+                            </div>
+                            <div style="white-space: nowrap;">
+                                <a href="{% url 'edit_goal' goal.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <a href="{% url 'complete_goal' goal.id %}" class="btn btn-sm btn-outline-success">✓ Complete</a>
+                                <form method="POST" action="{% url 'delete_goal' goal.id %}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this goal?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted">No active goals yet. <a href="{% url 'add_goal' %}">Create one!</a></p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Completed Goals -->
+    {% if completed_goals %}
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Completed Goals 🎉</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    {% for goal in completed_goals %}
+                        <div class="list-group-item d-flex justify-content-between align-items-start" style="opacity: 0.7;">
+                            <div style="flex-grow: 1;">
+                                <h6 class="mb-1" style="text-decoration: line-through;">{{ goal.title }}</h6>
+                                {% if goal.description %}
+                                    <p class="mb-2" style="font-size: 0.95rem;">{{ goal.description }}</p>
+                                {% endif %}
+                                <small class="text-muted">
+                                    Completed {{ goal.completed_at|date:"M d, Y" }}
+                                </small>
+                            </div>
+                            <div style="white-space: nowrap;">
+                                <a href="{% url 'reactivate_goal' goal.id %}" class="btn btn-sm btn-outline-warning">Reactivate</a>
+                                <form method="POST" action="{% url 'delete_goal' goal.id %}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this goal?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
