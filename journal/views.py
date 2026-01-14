@@ -159,7 +159,7 @@ def logout_view(request):
 # Michelle's Views
 
 def michelle_login_view(request):
-    """Login page for Michelle (head trainer)."""
+    """Login page for Michelle (head trainer) - unified access to all admin functions."""
     if request.method == 'POST':
         password = request.POST.get('password', '')
         # Simple password check - in production, use proper authentication
@@ -232,22 +232,14 @@ def michelle_logout_view(request):
 # Management Views (for adding horses and riders)
 
 def management_login_view(request):
-    """Login for management (add horses/riders)."""
-    if request.method == 'POST':
-        password = request.POST.get('password', '')
-        if password == 'admin123':  # Simple password - change this!
-            request.session['is_admin'] = True
-            return redirect('manage_horses')
-        else:
-            messages.error(request, 'Invalid password.')
-    
-    return render(request, 'journal/management_login.html')
+    """Redirect to Michelle login for backward compatibility."""
+    return redirect('michelle_login')
 
 
 def manage_horses_view(request):
     """Manage horses - add/edit."""
-    if not request.session.get('is_admin'):
-        return redirect('management_login')
+    if not request.session.get('is_michelle'):
+        return redirect('michelle_login')
     
     horses = Horse.objects.all().order_by('name')
     
@@ -281,8 +273,8 @@ def manage_horses_view(request):
 
 def manage_riders_view(request):
     """Manage riders - add/edit."""
-    if not request.session.get('is_admin'):
-        return redirect('management_login')
+    if not request.session.get('is_michelle'):
+        return redirect('michelle_login')
     
     horses = Horse.objects.all().order_by('name')
     riders = Rider.objects.all().order_by('name')
