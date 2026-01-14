@@ -227,7 +227,7 @@
 <body>
     {% if user.is_authenticated or request.session.rider_id or request.session.is_michelle %}
     <nav class="navbar">
-        <h1>🐴 Equestrian Journal</h1>
+        <h1>🐴 Think Through</h1>
         <div>
             {% if request.session.is_michelle %}
                 <a href="{% url 'michelle_dashboard' %}">Dashboard</a>
@@ -257,7 +257,7 @@
     </div>
 
     <footer>
-        <p>&copy; 2026 Equestrian Journal. All rights reserved. | <a href="{% url 'michelle_login' %}" style="color: #7f8c8d;">Head Trainer Access</a></p>
+        <p>&copy; 2026 Think Through. All rights reserved. | <a href="{% url 'michelle_login' %}" style="color: #7f8c8d;">Head Trainer Access</a></p>
     </footer>
 </body>
 </html>
