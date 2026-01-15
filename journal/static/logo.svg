@@ -1,33 +1,21 @@
-<svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-  <defs>
-    <style>
-      .logo-text { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 32px; font-weight: 600; fill: #2c3e50; }
-      .rider { fill: #2c3e50; }
-      .horse-line { stroke: #2c3e50; stroke-width: 2; fill: none; stroke-linecap: round; }
-    </style>
-  </defs>
+<svg viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg">
+  <!-- Horse head -->
+  <path d="M 10 25 Q 15 15 25 12 Q 35 10 40 15 Q 38 20 35 22 Q 30 24 25 25" fill="#2c3e50" stroke="#2c3e50" stroke-width="1"/>
   
-  <!-- Horse topline (curves along the text) -->
-  <path class="horse-line" d="M 15 38 Q 25 28 35 26 Q 45 24 55 26 Q 65 28 75 32 Q 85 36 95 38" />
+  <!-- Horse neck and body -->
+  <path d="M 25 25 Q 28 35 25 45" stroke="#2c3e50" stroke-width="2.5" fill="none" stroke-linecap="round"/>
   
-  <!-- Main text: inSights -->
-  <text x="10" y="48" class="logo-text">inSights</text>
+  <!-- Rider head -->
+  <circle cx="26" cy="20" r="2.5" fill="#2c3e50"/>
   
-  <!-- Second 'i' rider: replace the dot with a rider figure -->
-  <!-- This positions over the second 'i' (approximately at x=40) -->
-  <!-- Head -->
-  <circle cx="42" cy="18" r="3" class="rider" />
+  <!-- Rider body -->
+  <line x1="26" y1="22.5" x2="26" y2="32" stroke="#2c3e50" stroke-width="1.5" stroke-linecap="round"/>
   
-  <!-- Body (torso on horse) -->
-  <line x1="42" y1="21" x2="42" y2="32" stroke="#2c3e50" stroke-width="2" stroke-linecap="round" />
+  <!-- Rider arms -->
+  <line x1="26" y1="25" x2="22" y2="23" stroke="#2c3e50" stroke-width="1" stroke-linecap="round"/>
+  <line x1="26" y1="25" x2="30" y2="23" stroke="#2c3e50" stroke-width="1" stroke-linecap="round"/>
   
-  <!-- Arms -->
-  <line x1="42" y1="24" x2="37" y2="22" stroke="#2c3e50" stroke-width="1.5" stroke-linecap="round" />
-  <line x1="42" y1="24" x2="47" y2="22" stroke="#2c3e50" stroke-width="1.5" stroke-linecap="round" />
-  
-  <!-- Left leg (hanging down) -->
-  <line x1="42" y1="32" x2="38" y2="40" stroke="#2c3e50" stroke-width="1.5" stroke-linecap="round" />
-  
-  <!-- Right leg (hanging down) -->
-  <line x1="42" y1="32" x2="46" y2="40" stroke="#2c3e50" stroke-width="1.5" stroke-linecap="round" />
+  <!-- Rider legs -->
+  <line x1="26" y1="32" x2="23" y2="40" stroke="#2c3e50" stroke-width="1" stroke-linecap="round"/>
+  <line x1="26" y1="32" x2="29" y2="40" stroke="#2c3e50" stroke-width="1" stroke-linecap="round"/>
 </svg>
