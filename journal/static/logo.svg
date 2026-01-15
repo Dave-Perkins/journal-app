@@ -1,21 +1,25 @@
-<svg viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg" width="50" height="50">
   <!-- Horse head -->
-  <path d="M 10 25 Q 15 15 25 12 Q 35 10 40 15 Q 38 20 35 22 Q 30 24 25 25" fill="#2c3e50" stroke="#2c3e50" stroke-width="1"/>
+  <ellipse cx="20" cy="20" rx="8" ry="7" fill="white" stroke="white" stroke-width="0.5"/>
   
-  <!-- Horse neck and body -->
-  <path d="M 25 25 Q 28 35 25 45" stroke="#2c3e50" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Horse ears -->
+  <polygon points="16,12 15,5 18,10" fill="white"/>
+  <polygon points="24,12 25,5 22,10" fill="white"/>
+  
+  <!-- Horse neck -->
+  <path d="M 20 27 Q 22 33 20 42" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
   
   <!-- Rider head -->
-  <circle cx="26" cy="20" r="2.5" fill="#2c3e50"/>
+  <circle cx="22" cy="23" r="2.5" fill="white"/>
   
   <!-- Rider body -->
-  <line x1="26" y1="22.5" x2="26" y2="32" stroke="#2c3e50" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="22" y1="25.5" x2="22" y2="35" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
   
-  <!-- Rider arms -->
-  <line x1="26" y1="25" x2="22" y2="23" stroke="#2c3e50" stroke-width="1" stroke-linecap="round"/>
-  <line x1="26" y1="25" x2="30" y2="23" stroke="#2c3e50" stroke-width="1" stroke-linecap="round"/>
+  <!-- Rider arms reaching forward -->
+  <line x1="22" y1="27" x2="18" y2="24" stroke="white" stroke-width="1" stroke-linecap="round"/>
+  <line x1="22" y1="27" x2="26" y2="24" stroke="white" stroke-width="1" stroke-linecap="round"/>
   
   <!-- Rider legs -->
-  <line x1="26" y1="32" x2="23" y2="40" stroke="#2c3e50" stroke-width="1" stroke-linecap="round"/>
-  <line x1="26" y1="32" x2="29" y2="40" stroke="#2c3e50" stroke-width="1" stroke-linecap="round"/>
+  <line x1="22" y1="35" x2="19" y2="43" stroke="white" stroke-width="1" stroke-linecap="round"/>
+  <line x1="22" y1="35" x2="25" y2="43" stroke="white" stroke-width="1" stroke-linecap="round"/>
 </svg>

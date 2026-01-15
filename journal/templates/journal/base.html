@@ -229,7 +229,25 @@
     {% if user.is_authenticated or request.session.rider_id or request.session.is_michelle %}
     <nav class="navbar">
         <div style="display: flex; align-items: center; gap: 1rem;">
-            <img src="{% static 'logo.svg' %}" alt="inSights" style="height: 50px; width: 50px; flex-shrink: 0;">
+            <svg viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg" width="50" height="50" style="flex-shrink: 0;">
+                <!-- Horse head -->
+                <ellipse cx="20" cy="20" rx="8" ry="7" fill="white" stroke="white" stroke-width="0.5"/>
+                <!-- Horse ears -->
+                <polygon points="16,12 15,5 18,10" fill="white"/>
+                <polygon points="24,12 25,5 22,10" fill="white"/>
+                <!-- Horse neck -->
+                <path d="M 20 27 Q 22 33 20 42" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <!-- Rider head -->
+                <circle cx="22" cy="23" r="2.5" fill="white"/>
+                <!-- Rider body -->
+                <line x1="22" y1="25.5" x2="22" y2="35" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- Rider arms -->
+                <line x1="22" y1="27" x2="18" y2="24" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                <line x1="22" y1="27" x2="26" y2="24" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                <!-- Rider legs -->
+                <line x1="22" y1="35" x2="19" y2="43" stroke="white" stroke-width="1" stroke-linecap="round"/>
+                <line x1="22" y1="35" x2="25" y2="43" stroke="white" stroke-width="1" stroke-linecap="round"/>
+            </svg>
             <span style="font-size: 1.5rem; font-weight: 600; color: white; margin: 0;">inSights</span>
         </div>
         <div>
