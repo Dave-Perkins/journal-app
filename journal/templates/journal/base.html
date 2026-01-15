@@ -228,7 +228,9 @@
 <body>
     {% if user.is_authenticated or request.session.rider_id or request.session.is_michelle %}
     <nav class="navbar">
-        <img src="{% static 'logo.svg' %}" alt="inSights logo" style="height: 45px; width: auto;">
+        <h1 style="margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+            <img src="{% static 'logo.svg' %}" alt="inSights" style="height: 40px; width: auto; display: inline-block;">
+        </h1>
         <div>
             {% if request.session.is_michelle %}
                 <a href="{% url 'michelle_dashboard' %}">Dashboard</a>
