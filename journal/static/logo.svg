@@ -1,0 +1,33 @@
+<svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <style>
+      .logo-text { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 32px; font-weight: 600; fill: #2c3e50; }
+      .rider { fill: #2c3e50; }
+      .horse-line { stroke: #2c3e50; stroke-width: 2; fill: none; stroke-linecap: round; }
+    </style>
+  </defs>
+  
+  <!-- Horse topline (curves along the text) -->
+  <path class="horse-line" d="M 15 38 Q 25 28 35 26 Q 45 24 55 26 Q 65 28 75 32 Q 85 36 95 38" />
+  
+  <!-- Main text: inSights -->
+  <text x="10" y="48" class="logo-text">inSights</text>
+  
+  <!-- Second 'i' rider: replace the dot with a rider figure -->
+  <!-- This positions over the second 'i' (approximately at x=40) -->
+  <!-- Head -->
+  <circle cx="42" cy="18" r="3" class="rider" />
+  
+  <!-- Body (torso on horse) -->
+  <line x1="42" y1="21" x2="42" y2="32" stroke="#2c3e50" stroke-width="2" stroke-linecap="round" />
+  
+  <!-- Arms -->
+  <line x1="42" y1="24" x2="37" y2="22" stroke="#2c3e50" stroke-width="1.5" stroke-linecap="round" />
+  <line x1="42" y1="24" x2="47" y2="22" stroke="#2c3e50" stroke-width="1.5" stroke-linecap="round" />
+  
+  <!-- Left leg (hanging down) -->
+  <line x1="42" y1="32" x2="38" y2="40" stroke="#2c3e50" stroke-width="1.5" stroke-linecap="round" />
+  
+  <!-- Right leg (hanging down) -->
+  <line x1="42" y1="32" x2="46" y2="40" stroke="#2c3e50" stroke-width="1.5" stroke-linecap="round" />
+</svg>

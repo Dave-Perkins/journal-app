@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -227,7 +228,9 @@
 <body>
     {% if user.is_authenticated or request.session.rider_id or request.session.is_michelle %}
     <nav class="navbar">
-        <h1>🐴 inSights</h1>
+        <div style="display: flex; align-items: center; gap: 0.5rem; height: 60px;">
+            <img src="{% static 'logo.svg' %}" alt="inSights logo" style="height: 50px; width: auto;">
+        </div>
         <div>
             {% if request.session.is_michelle %}
                 <a href="{% url 'michelle_dashboard' %}">Dashboard</a>
