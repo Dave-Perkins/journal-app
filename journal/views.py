@@ -325,6 +325,7 @@ def calendar_view(request):
     """Display calendar for logged-in rider's horse."""
     from datetime import datetime
     from calendar import monthcalendar, month_name
+    from django.utils import timezone
     
     rider_id = request.session.get('rider_id')
     if not rider_id:
@@ -332,9 +333,10 @@ def calendar_view(request):
     
     rider = get_object_or_404(Rider, id=rider_id)
     
-    # Get month/year from request or use current
-    year = int(request.GET.get('year', datetime.now().year))
-    month = int(request.GET.get('month', datetime.now().month))
+    # Get month/year from request or use current (timezone-aware)
+    now = timezone.now()
+    year = int(request.GET.get('year', now.year))
+    month = int(request.GET.get('month', now.month))
     
     # Get all events for this horse in this month
     from .models import Event
@@ -470,14 +472,16 @@ def michelle_calendar_view(request):
     """Michelle's view of all horses' events."""
     from datetime import datetime
     from calendar import monthcalendar, month_name
+    from django.utils import timezone
     from .models import Event
     
     if not request.session.get('is_michelle'):
         return redirect('michelle_login')
     
-    # Get month/year from request or use current
-    year = int(request.GET.get('year', datetime.now().year))
-    month = int(request.GET.get('month', datetime.now().month))
+    # Get month/year from request or use current (timezone-aware)
+    now = timezone.now()
+    year = int(request.GET.get('year', now.year))
+    month = int(request.GET.get('month', now.month))
     
     # Get all events for all horses in this month
     all_events = Event.objects.filter(date__year=year, date__month=month).order_by('date', 'time')
