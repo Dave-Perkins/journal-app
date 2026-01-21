@@ -63,6 +63,8 @@ class Event(models.Model):
     """Represents a calendar event for a horse (competition, vet appointment, etc.)"""
     EVENT_TYPES = [
         ('competition', 'Competition'),
+        ('ride', 'Ride'),
+        ('lesson', 'Lesson'),
         ('vet', 'Vet Appointment'),
         ('farrier', 'Farrier Visit'),
         ('other', 'Other'),
