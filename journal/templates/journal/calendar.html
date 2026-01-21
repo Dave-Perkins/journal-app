@@ -42,7 +42,7 @@
                         {% for week in calendar %}
                             <tr style="height: 120px;">
                                 {% for day in week %}
-                                    <td class="align-top {% if day == 0 %}table-light{% endif %}" style="background-color: {% if day == 0 %}#f8f9fa{% endif %}; word-wrap: break-word; overflow-wrap: break-word;">>
+                                    <td class="align-top {% if day == 0 %}table-light{% endif %}" style="background-color: {% if day == 0 %}#f8f9fa{% endif %}; word-wrap: break-word; overflow-wrap: break-word;">
                                         {% if day != 0 %}
                                             <strong>{{ day }}</strong>
                                             <div style="margin-top: 0.5rem; font-size: 0.85rem;">
