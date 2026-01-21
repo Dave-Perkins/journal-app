@@ -326,6 +326,7 @@ def calendar_view(request):
     from datetime import datetime
     from calendar import monthcalendar, month_name
     from django.utils import timezone
+    import pytz
     
     rider_id = request.session.get('rider_id')
     if not rider_id:
@@ -334,7 +335,9 @@ def calendar_view(request):
     rider = get_object_or_404(Rider, id=rider_id)
     
     # Get month/year from request or use current (timezone-aware)
-    now = timezone.now()
+    # Convert to Eastern time to ensure correct day-of-week calculation
+    eastern = pytz.timezone('America/New_York')
+    now = timezone.now().astimezone(eastern)
     year = int(request.GET.get('year', now.year))
     month = int(request.GET.get('month', now.month))
     
@@ -473,13 +476,16 @@ def michelle_calendar_view(request):
     from datetime import datetime
     from calendar import monthcalendar, month_name
     from django.utils import timezone
+    import pytz
     from .models import Event
     
     if not request.session.get('is_michelle'):
         return redirect('michelle_login')
     
     # Get month/year from request or use current (timezone-aware)
-    now = timezone.now()
+    # Convert to Eastern time to ensure correct day-of-week calculation
+    eastern = pytz.timezone('America/New_York')
+    now = timezone.now().astimezone(eastern)
     year = int(request.GET.get('year', now.year))
     month = int(request.GET.get('month', now.month))
     
