@@ -343,6 +343,7 @@ def calendar_view(request):
     
     # Get all events for this horse in this month
     from .models import Event
+    import calendar as cal_module
     events = Event.objects.filter(horse=rider.horse, date__year=year, date__month=month)
     
     # Create a dict of events by date for easy lookup
@@ -353,8 +354,9 @@ def calendar_view(request):
             events_by_date[date_key] = []
         events_by_date[date_key].append(event)
     
-    # Build calendar
-    cal = monthcalendar(year, month)
+    # Build calendar (starting with Monday)
+    cal_obj = cal_module.Calendar(firstweekday=0)
+    cal = cal_obj.monthdayscalendar(year, month)
     
     # Navigation
     prev_month = month - 1 if month > 1 else 12
@@ -490,6 +492,7 @@ def michelle_calendar_view(request):
     month = int(request.GET.get('month', now.month))
     
     # Get all events for all horses in this month
+    import calendar as cal_module
     all_events = Event.objects.filter(date__year=year, date__month=month).order_by('date', 'time')
     
     # Create a dict of events by date
@@ -500,8 +503,9 @@ def michelle_calendar_view(request):
             events_by_date[date_key] = []
         events_by_date[date_key].append(event)
     
-    # Build calendar
-    cal = monthcalendar(year, month)
+    # Build calendar (starting with Monday)
+    cal_obj = cal_module.Calendar(firstweekday=0)
+    cal = cal_obj.monthdayscalendar(year, month)
     
     # Navigation
     prev_month = month - 1 if month > 1 else 12
